@@ -68,7 +68,7 @@ final class CanvaExtensionRouteLoader implements LoaderInterface
             ->setMethods('POST');
 
         $publishResourcesGetRoute = (new Route('/canva/extensions/{extension_id}/publish/resources/get'))
-            ->setDefault('_controller', PublishResourcesController::class . '::get')
+            ->setDefault('_controller', PublishResourcesController::class . '::getAction')
             ->setMethods('POST');
 
         $publishResourcesUpload = (new Route('/canva/extensions/{extension_id}/publish/resources/upload'))

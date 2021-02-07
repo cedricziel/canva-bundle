@@ -2,26 +2,52 @@
 
 namespace CedricZiel\CanvaBundle\Controller;
 
-use Canva\Publish\FindRequest as CanvaFindRequest;
-use Canva\Publish\GetResourceRequest as CanvaGetResourceRequest;
-use Canva\Publish\UploadRequest as CanvaUploadRequest;
-use Symfony\Component\HttpFoundation\Request as SymfonyRequest;
-use Symfony\Component\HttpKernel\Exception\NotAcceptableHttpException;
+use Canva\Publish\Request\FindRequest as CanvaFindRequest;
+use Canva\Publish\Request\GetResourceRequest as CanvaGetResourceRequest;
+use Canva\Publish\Request\UploadRequest as CanvaUploadRequest;
+use CedricZiel\CanvaBundle\Event\Publish\FindRequestEvent;
+use CedricZiel\CanvaBundle\Event\Publish\GetRequestEvent;
+use CedricZiel\CanvaBundle\Event\Publish\UploadRequestEvent;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
-class PublishResourcesController
+class PublishResourcesController extends AbstractController
 {
-    public function find(SymfonyRequest $request, CanvaFindRequest $findRequest)
+    /**
+     * @var EventDispatcherInterface
+     */
+    private EventDispatcherInterface $dispatcher;
+
+    public function __construct(EventDispatcherInterface $dispatcher)
     {
-        throw new NotAcceptableHttpException();
+        $this->dispatcher = $dispatcher;
     }
 
-    public function get(SymfonyRequest $request, CanvaGetResourceRequest $getResourceRequest)
+    public function find(CanvaFindRequest $findRequest)
     {
-        throw new NotAcceptableHttpException();
+        $event = new FindRequestEvent($findRequest);
+
+        $this->dispatcher->dispatch($event);
+
+        return new JsonResponse($event->getResponse());
     }
 
-    public function upload(SymfonyRequest $request, CanvaUploadRequest $uploadRequest)
+    public function getAction(CanvaGetResourceRequest $getResourceRequest)
     {
-        throw new NotAcceptableHttpException();
+        $event = new GetRequestEvent($getResourceRequest);
+
+        $this->dispatcher->dispatch($event);
+
+        return new JsonResponse($event->getResponse());
+    }
+
+    public function upload(CanvaUploadRequest $uploadRequest)
+    {
+        $event = new UploadRequestEvent($uploadRequest);
+
+        $this->dispatcher->dispatch($event);
+
+        return new JsonResponse($event->getResponse());
     }
 }

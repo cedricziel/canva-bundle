@@ -3,14 +3,29 @@
 namespace CedricZiel\CanvaBundle\Controller;
 
 use Canva\Content\Request\FindRequest;
+use CedricZiel\CanvaBundle\Event\Content\FindRequestEvent;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Request as SymfonyRequest;
-use Symfony\Component\HttpKernel\Exception\NotAcceptableHttpException;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 class ContentResourcesController extends AbstractController
 {
-    public function find(SymfonyRequest $request, FindRequest $canvaRequest)
+    /**
+     * @var EventDispatcherInterface
+     */
+    private EventDispatcherInterface $eventDispatcher;
+
+    public function __construct(EventDispatcherInterface $eventDispatcher)
     {
-        throw new NotAcceptableHttpException();
+        $this->eventDispatcher = $eventDispatcher;
+    }
+
+    public function find(FindRequest $canvaRequest)
+    {
+        $event = new FindRequestEvent($canvaRequest);
+
+        $this->eventDispatcher->dispatch($event);
+
+        return new JsonResponse($event->getResponse());
     }
 }
