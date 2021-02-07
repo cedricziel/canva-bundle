@@ -1,0 +1,28 @@
+parameters:
+  canvaSecret: ~
+
+services:
+  _defaults:
+    autowire: true
+    autoconfigure: true
+
+  CedricZiel\CanvaBundle\:
+    resource: '../../'
+    exclude:
+      - '../src/DependencyInjection/'
+      - '../src/Tests/'
+
+  CedricZiel\CanvaBundle\Controller\:
+    resource: '../../Controller/'
+    tags: [ 'controller.service_arguments' ]
+
+  CedricZiel\CanvaBundle\EventListener\SignatureValidationListener:
+    arguments:
+      [ '%canvaSecret%' ]
+    tags:
+      - { name: kernel.event_listener, event: kernel.request, priority: 256 }
+  CedricZiel\CanvaBundle\Routing\CanvaExtensionRouteLoader:
+    arguments:
+      [ [] ]
+    tags:
+      - { name: routing.loader }
