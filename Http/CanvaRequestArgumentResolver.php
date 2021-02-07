@@ -27,6 +27,10 @@ final class CanvaRequestArgumentResolver implements ArgumentValueResolverInterfa
             return false;
         }
 
+        if (strlen($class) < 10) {
+            return false;
+        }
+
         $haystack = class_implements($class);
         return in_array(\Canva\Request::class, $haystack, true);
     }
