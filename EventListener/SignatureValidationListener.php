@@ -40,6 +40,9 @@ final class SignatureValidationListener
             case str_ends_with($path, '/configuration'):
                 $operation = '/configuration';
                 break;
+            case str_ends_with($path, '/configuration/delete'):
+                $operation = '/configuration/delete';
+                break;
             case str_ends_with($path, '/publish/resources/find'):
                 $operation = '/publish/resources/find';
                 break;

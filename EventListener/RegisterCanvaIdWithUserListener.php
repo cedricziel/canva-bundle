@@ -2,33 +2,32 @@
 
 namespace CedricZiel\CanvaBundle\EventListener;
 
-use App\Entity\Security\User;
 use App\Security\AppLoginFormAuthenticator;
-use App\Security\CanvaLoginHelper;
 use CedricZiel\CanvaBundle\Model\CanvaRecognized;
+use CedricZiel\CanvaBundle\Security\CanvaLoginHelper;
 use Doctrine\Persistence\ObjectManager;
-use Symfony\Component\HttpKernel\Event\ResponseEvent;
-use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
+use Symfony\Component\HttpKernel\Event\RequestEvent;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 final class RegisterCanvaIdWithUserListener
 {
     /**
-     * @var TokenStorage
+     * @var TokenStorageInterface
      */
-    private TokenStorage $tokenStorage;
+    private TokenStorageInterface $tokenStorage;
 
     /**
      * @var ObjectManager
      */
     private ObjectManager $manager;
 
-    public function __construct(TokenStorage $tokenStorage, ObjectManager $manager)
+    public function __construct(TokenStorageInterface $tokenStorage, ObjectManager $manager)
     {
         $this->tokenStorage = $tokenStorage;
         $this->manager = $manager;
     }
 
-    public function __invoke(ResponseEvent $event)
+    public function __invoke(RequestEvent $event)
     {
         if (!$event->isMasterRequest()) {
             return;
@@ -58,6 +57,7 @@ final class RegisterCanvaIdWithUserListener
         $user->setCanvaId($contextFromRequest['user']);
 
         $this->manager->persist($user);
+        $this->manager->flush($user);
 
         $event->setResponse(CanvaLoginHelper::createLoginRedirect($contextFromRequest['state']));
     }

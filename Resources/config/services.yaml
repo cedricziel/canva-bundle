@@ -18,9 +18,17 @@ services:
 
   CedricZiel\CanvaBundle\EventListener\SignatureValidationListener:
     arguments:
-      [ '%canvaSecret%' ]
+      - '%canvaSecret%'
     tags:
       - { name: kernel.event_listener, event: kernel.request, priority: 256 }
+
+  CedricZiel\CanvaBundle\EventListener\RegisterCanvaIdWithUserListener:
+    arguments:
+      - '@security.token_storage'
+      - '@doctrine.orm.entity_manager'
+    tags:
+      - { name: kernel.event_listener, event: kernel.request }
+
   CedricZiel\CanvaBundle\Routing\CanvaExtensionRouteLoader:
     arguments:
       [ [] ]
