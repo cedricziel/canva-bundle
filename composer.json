@@ -1,0 +1,22 @@
+{
+    "name": "cedricziel/canva-bundle",
+    "description": "A Symfony bundle to integrate canva.com functionality",
+    "type": "symfony-bundle",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Cedric Ziel",
+            "email": "mail@cedric-ziel.com"
+        }
+    ],
+    "require": {
+        "cedricziel/canva-extension-helper": "^0.0.6"
+    },
+    "autoload": {
+        "psr-4": {
+            "CedricZiel\\CanvaBundle\\": ""
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}
