@@ -26,6 +26,7 @@ services:
     arguments:
       - '@security.token_storage'
       - '@doctrine.orm.entity_manager'
+      - '?'
     tags:
       - { name: kernel.event_listener, event: kernel.request }
 

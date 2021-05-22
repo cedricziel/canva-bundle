@@ -21,10 +21,13 @@ final class RegisterCanvaIdWithUserListener
      */
     private ObjectManager $manager;
 
-    public function __construct(TokenStorageInterface $tokenStorage, ObjectManager $manager)
+    private string $loginRoute;
+
+    public function __construct(TokenStorageInterface $tokenStorage, ObjectManager $manager, string $loginRoute)
     {
         $this->tokenStorage = $tokenStorage;
         $this->manager = $manager;
+        $this->loginRoute = $loginRoute;
     }
 
     public function __invoke(RequestEvent $event)
@@ -36,7 +39,7 @@ final class RegisterCanvaIdWithUserListener
         $request = $event->getRequest();
 
         // only act on the login route.
-        if (AppLoginFormAuthenticator::LOGIN_ROUTE !== $request->attributes->get('_route')) {
+        if ($this->loginRoute !== $request->attributes->get('_route')) {
             return;
         }
 

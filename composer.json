@@ -19,9 +19,23 @@
         "symfony/messenger": "^5.2",
         "symfony/serializer": "^5.2"
     },
+    "require-dev": {
+        "symfony/phpunit-bridge": "^5.2"
+    },
     "autoload": {
         "psr-4": {
             "CedricZiel\\CanvaBundle\\": ""
+        }
+    },
+    "scripts": {
+        "test": "@php vendor/bin/simple-phpunit"
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.0.x-dev"
         }
     }
 }

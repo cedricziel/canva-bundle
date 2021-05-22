@@ -21,6 +21,7 @@ class Configuration implements ConfigurationInterface
                     ->end()
                 ->end()
             ->end()
+            ->scalarNode('login_route')->isRequired()->end()
         ;
 
         return $treeBuilder;
